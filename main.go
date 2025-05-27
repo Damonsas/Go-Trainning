@@ -1,5 +1,8 @@
 package main
 
+import "encoding/json"
+
+//partie 1
 // exo 1
 
 func reverseString(str string) string {
@@ -83,3 +86,29 @@ func main() {
 		print(num, " ")
 	}
 }
+
+//partie 2
+// exo 1
+
+type Person struct {
+	Name string
+	Age  int
+}
+
+func (p Person) Greet() string {
+	return "Hello, my name is " + p.Name
+}
+
+// exo 2
+
+type User struct {
+	User string `json:"username"`
+	Age  int    `json:"age"`
+}
+
+func (u User) ToJSON() string {
+	b, _ := json.Marshal(u)
+	return string(b)
+}
+
+// exo 3

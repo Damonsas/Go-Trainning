@@ -1,6 +1,10 @@
 package main
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"errors"
+	"net/http"
+)
 
 //partie 1
 // exo 1
@@ -112,3 +116,60 @@ func (u User) ToJSON() string {
 }
 
 // exo 3
+
+func HelloHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "Hello, World!"})
+}
+
+// exo 4
+
+func MapFilter(m map[string]int) map[string]int {
+	result := make(map[string]int)
+	for k, v := range m {
+		if v%2 == 0 {
+			result[k] = v
+		}
+	}
+	return result
+}
+
+// exo 5
+
+func divide(a, b float64) (float64, error) {
+	if b == 0 {
+		return 0, errors.New("division by zero")
+	}
+	return a / b, nil
+}
+
+func main() {
+
+	// pour print ceux de la partie 2. à masquer celui de la partie 1 pour éviter les conflits
+	// exo 1
+	p := Person{Name: "Danh"}
+	println(p.Greet())
+
+	// exo 2
+	u := User{User: "danhaxe", Age: 25}
+	println(u.ToJSON())
+
+	// exo 3
+	http.HandleFunc("/hello", HelloHandler)
+	http.ListenAndServe(":8080", nil)
+
+	// exo 4
+	m := map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}
+	filtered := MapFilter(m)
+	for k, v := range filtered {
+		println(k, v)
+	}
+	// exo 5
+	result, err := divide(10, 2)
+	if err != nil {
+		println("Error:", err.Error())
+	} else {
+		println("Result:", result)
+	}
+}
